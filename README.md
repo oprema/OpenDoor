@@ -1,5 +1,5 @@
 # OpenDoor
-# A Raspberry Pi Application to open doors in an appartment house.
+### A Raspberry Pi Application to open doors in an appartment house.
 For some people it is simply convinient to open the appartment doors via a 
 web application or based on time or via a mobile app. 
 
