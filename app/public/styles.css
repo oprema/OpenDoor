@@ -1,6 +1,7 @@
 .container .jumbotron {
   background-color: #ffc;
   font-size: 18px;
+  padding-top: 1px;
 }
 .green {
   color: green;
@@ -43,14 +44,6 @@
   padding-left: 5px;
   padding-right: 5px;
 }
-@media (max-width: 767px) {
-  li.hide_lang {
-    display: none;
-  }
-  #properties {
-    display: none;
-  }
-}
 .clockpicker {
   width: 140px;
 }
@@ -62,4 +55,32 @@
 }
 .delete-duration, .toggle-duration {
   cursor: pointer;
+}
+@media (max-width: 767px) {
+  li.hide_lang {
+    display: none;
+  }
+  #properties {
+    display: none;
+  }
+  #authcodes {
+    display: none;
+  }
+}
+@media (min-width: 768px) {
+  .collapse-hide {
+    display: none !important;
+  }
+}
+@media (max-width: 660px) {
+  .btn-margin {
+    margin-bottom: 15px;
+  }
+}
+.navbar-fixed-top {
+  position: relative !important;
+}
+.navbar {
+  margin-bottom: 0px;
+  min-height: 0px;
 }

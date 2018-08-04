@@ -18,7 +18,7 @@
     %nav.navbar.navbar-default.navbar-fixed-top{role: "navigation"}
       .container
         .navbar-header
-          %button.navbar-toggle{"data-target": ".navbar-collapse", "data-toggle": "collapse", type: "button"}
+          %button.navbar-toggle{"data-target": "#navbar-lang", "data-toggle": "collapse", type: "button"}
             %span.sr-only Toggle navigation
             %span.icon-bar
             %span.icon-bar
@@ -27,6 +27,15 @@
             %span.glyphicon.glyphicon-bell{aria: {hidden: true}, style: 'color: red;'}
             OpenDoor - 
             %span#time
+
+        .collapse-hide
+          .collapse.navbar-collapse#navbar-lang
+            %ul.nav.navbar-nav
+              %li.active
+                %a{href: switch_lang(:de), style: 'padding-left: 4px;'}
+                  Deutsch
+                %a{href: switch_lang(:en), style: 'padding-left: 4px;'}
+                  English
 
         %ul.nav.navbar-nav.navbar
           %button.btn.btn-warning.navbar-btn#authcodes{type: "button"}

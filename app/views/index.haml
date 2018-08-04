@@ -1,13 +1,13 @@
 %h2
   = @title
 %p
-  %button.btn.btn-primary.btn-lg#open-front-door{type: 'button'}
+  %button.btn.btn-primary.btn-lg.btn-margin#open-front-door{type: 'button'}
     = I18n.t('opendoor.open_front_door_now')
   &nbsp;
   %button.btn.btn-warning.btn-lg#open-front-door-timed{type: 'button'}
     = I18n.t('opendoor.open_door_timed').gsub('{mins}', '60')
-%p
 
+%p
   .btn-group
     %button.btn.btn-success.btn-lg#open-apartment-door{type: 'button'}
       = I18n.t('opendoor.open_apartment_door_now')
