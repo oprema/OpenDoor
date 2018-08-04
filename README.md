@@ -1,4 +1,4 @@
-# OpenDoor a Raspberry Pi Application to open doors in an apartment building.
+# OpenDoor a Raspberry Pi Application to open doors in an apartment building
 
 For some people it is simply convinient to open the apartment door via a web application. Some reasons may be: Lots of visitors to a certain time (let them all in if needed), being handicapped (no need to go to the door to open it) or simply being lazy :-).
 
@@ -52,7 +52,10 @@ Checkout OpenDoor directly into /home/pi and create the directory below
 mkdir ~/.opendoord
 sudo chmod -R 775 ~/.opendoord
 ```
-Next install a recent Ruby 2.5.1 (.rbenv) with ~/.ruby_install.sh (not sudo)
+Next install a recent Ruby 2.5.1 (.rbenv) with 
+```
+~/.ruby_install.sh # (not sudo)
+```
 This takes about 2h on a raspi zero!
 Next we need more Raspbian and Python3 packages
 ```
@@ -77,7 +80,7 @@ bundle install
 ```
 vi ~/app/.env
 ```
-replace passwd and use your own
+add line and replace passwd and use your own
 ```
 APP_PASS="passwd"
 ```
@@ -126,8 +129,7 @@ crontab -e
 ```
 add:
 ```
-@reboot sudo rm /tmp/*fifo
-@reboot sudo ~/opendoord.py --verbose
+@reboot sudo /home/pi/restart-opendoor.sh
 ```
 
 ### Do not forget to change the default pi password.
