@@ -1,0 +1,11 @@
+%div{id: "auth_#{auth.id}"}
+  %h4
+    %span{class: ("grey" if auth.disabled?), id: "auth_title_#{auth.id}"}
+      = "Auth ID für #{auth.user_name}"
+    &nbsp;
+    %a.disable-auth-code{href: "#", id: "code_#{auth.id}", title: "Enable/Disable Auth Code"}
+      %i.fa.fa-toggle-off
+    %a.remove-auth-code{href: "#", id: "code_#{auth.id}", title: "Delete Auth Code"}
+      %i.fa.fa-window-close
+  %code
+    = auth.auth_code

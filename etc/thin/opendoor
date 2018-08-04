@@ -1,0 +1,15 @@
+---
+chdir: "/home/pi/app"
+environment: development
+address: 127.0.0.1
+port: 3000
+timeout: 30
+log: "/home/pi/app/log/thin.log"
+pid: /run/thin.pid
+max_conns: 1024
+max_persistent_conns: 100
+require: []
+wait: 30
+threadpool_size: 20
+servers: 1
+daemonize: true

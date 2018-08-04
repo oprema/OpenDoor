@@ -1,0 +1,463 @@
+!!!
+%html
+  %head
+    %title OpenDoor
+    %meta{content: "width=device-width, initial-scale=1.0", name: "viewport"}/
+    %link{href: "/vendor/font-awesome/css/font-awesome.min.css", rel: "stylesheet"}/
+    %link{href: "/vendor/bootstrap/css/bootstrap.min.css", rel: "stylesheet"}/
+    %link{href: "/vendor/bootstrap/css/bootstrap-clockpicker.min.css", rel: "stylesheet"}/
+    %link{href: "/styles.css", rel: "stylesheet"}/
+    /[if lt IE 9]
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+  %body
+    = partial('authcodes')
+    = partial('duration')
+
+    / Static navbar
+    %nav.navbar.navbar-default.navbar-fixed-top{role: "navigation"}
+      .container
+        .navbar-header
+          %button.navbar-toggle{"data-target": ".navbar-collapse", "data-toggle": "collapse", type: "button"}
+            %span.sr-only Toggle navigation
+            %span.icon-bar
+            %span.icon-bar
+            %span.icon-bar
+          %a.navbar-brand{href: "/"}
+            %span.glyphicon.glyphicon-bell{aria: {hidden: true}, style: 'color: red;'}
+            OpenDoor - 
+            %span#time
+
+        %ul.nav.navbar-nav.navbar
+          %button.btn.btn-warning.navbar-btn#authcodes{type: "button"}
+            = I18n.t('opendoor.authorizations')
+
+        %ul.nav.navbar-nav.navbar-right
+          - if I18n.locale == :de
+            %li.hide_lang
+              %img#selected_de{src: '/images/content_client.gif', style: 'padding-top: 20px;'}/
+          %li.hide_lang
+            %a{href: switch_lang(:de), style: 'padding-left: 4px;'}
+              %img{src: '/images/f0-de.gif', alt: 'German', title: 'German'}/
+          - if I18n.locale == :en
+            %li.hide_lang
+              %img#selected_en{src: '/images/content_client.gif', style: 'padding-top: 20px;'}/
+          %li.hide_lang
+            %a{href: switch_lang(:en), style: 'padding-left: 4px;'}
+              %img{src: '/images/f0-gb.gif', alt: 'English', title: 'English'}/
+
+    .container
+      .jumbotron
+        %p
+        - if I18n.locale == :de
+          #websocket_timeout.alert.alert-danger.hide{role: "alert"}
+            %strong
+              Achtung!
+            Bitte Seite neuladen um Benachrichtigungen zu erhalten.
+        - else
+          #websocket_timeout.alert.alert-danger.hide{role: "alert"}
+            %strong
+              Attention!
+            Please reload this page to receive notifications.
+
+        #msgs
+        = yield
+
+    / jQuery (necessary for Bootstrap's JavaScript plugins)
+    %script{src: "/vendor/jquery-1.11.3.min.js"}
+
+    / jQuery-UI
+    %script{src: "/vendor/jquery-ui.min.js"}
+
+    / Include all compiled plugins (below), or include individual files as needed
+    %script{src: "/vendor/bootstrap/js/bootstrap.min.js"}
+
+    / Time picker
+    %script{src: "/vendor/bootstrap/js/bootstrap-clockpicker.min.js"}
+
+    :javascript
+      $(document).ready(function() {
+        // call this function again in 1000ms
+        var updateClock = function() {
+          var now = new Date();
+          var time = now.toLocaleTimeString();
+          document.getElementById('time').innerHTML = time;
+        }
+        setInterval(updateClock, 1000);
+
+        // clockpicker settings
+        $('.clockpicker').clockpicker({
+          autoclose: true,
+          donetext: 'Done',
+          default: '12:00',
+          afterDone: function() {
+          }
+        });
+
+        $("#authcodes").click(function() {
+          $('#authcodes-modal').modal('show')
+        });
+
+        $("#create-auth-code").click(function() {
+          var user_name = $('#auth-name').val();
+          if (user_name === "") {
+            $('#name-missing').addClass('has-error');
+          } else {
+            $('#name-missing').removeClass('has-error');
+            $.post("/create_auth_code", {name: user_name}, function(data, status) {
+              if (status == 'success') {
+                data = JSON.parse(data);
+                $('#authcodes-body').html(data.html);
+              } else {
+                alert("#{I18n.t('opendoor.user_exists')}");
+              }
+            });
+          }
+        });
+
+        $('body').on('click', '.remove-auth-code', function() {
+          var entry = $(this).attr('id');
+          var id = entry.replace('code_', '');
+          entry = entry.replace('code', '#auth');
+          $(entry).hide();
+          $.post("/remove_auth_code", {id: id}, function(data, status) {
+            if (status == 'success') {
+              data = JSON.parse(data);
+              if (data.count == 0) {
+                $('.modal-body').html("#{I18n.t('opendoor.no_auth_codes')}");
+              }
+            } else {
+              alert("Could not remove auth code!");
+            }
+          });
+        });
+
+        $('body').on('click', '.disable-auth-code', function() {
+          var entry = $(this).attr('id');
+          var id = entry.replace('code_', '');
+          entry = entry.replace('code', '#auth_title');
+          $.post("/disable_auth_code", {id: id}, function(data, status) {
+            if (status == 'success') {
+              data = JSON.parse(data);
+              if (data.disabled === 'true') {
+                $(entry).addClass('grey')
+              } else {
+                $(entry).removeClass('grey')
+              }
+            } else {
+              alert("Could not toggle disable flag in auth code!");
+            }
+          });
+        });
+
+        $("#open-front-door").click(function() {
+          $.post("/open_front_door", {}, function(data, status) {
+            if (status != 'success') {
+              alert("Could not open front door.");
+            }
+          });
+        });
+
+        $("#open-apartment-door").click(function() {
+          $.post("/open_apartment_door", {}, function(data, status) {
+            if (status != 'success') {
+              alert("Could not open apartment door.");
+            }
+          });
+        });
+
+        $("#keep-apartment-door-3m-open").click(function() {
+          $(".li-close").removeClass('hidden');
+          $.post("/keep_apartment_door_open", {duration: 3}, function(data, status) {
+            if (status != 'success') {
+              alert("Could not send keep apartment door open.");
+            }
+          });
+        });
+
+        $("#keep-apartment-door-5m-open").click(function() {
+          $(".li-close").removeClass('hidden');
+          $.post("/keep_apartment_door_open", {duration: 5}, function(data, status) {
+            if (status != 'success') {
+              alert("Could not send keep apartment door open.");
+            }
+          });
+        });
+
+        $("#keep-apartment-door-2h-open").click(function() {
+          $(".li-close").removeClass('hidden');
+          $.post("/keep_apartment_door_open", {duration: 120}, function(data, status) {
+            if (status != 'success') {
+              alert("Could not send keep apartment door open.");
+            }
+          });
+        });
+
+        $("#close-apartment-door").click(function() {
+          $(".li-close").addClass('hidden');
+          $.post("/close_apartment_door", {}, function(data, status) {
+            if (status != 'success') {
+              alert("Could not send keep apartment door open.");
+            }
+          });
+        });
+
+        $("#open-front-door-timed").click(function() {
+          $.post("/open_front_door_timed", {duration: 60}, function(data, status) {
+            if (status != 'success') {
+              alert("Could not use open door timer.");
+            }
+          });
+        });
+
+        $("#new-duration").click(function() {
+          $('#duration-id').val('');
+          $('#duration-title').val('');
+          $('#open-dow').val('0');
+          $('#open-begin').val('12:00');
+          $('#open-end').val('12:00');
+          $('#open-after').val('0');
+          $('#duration-modal').modal('show');
+        });
+
+        $('#duration-modal').on('shown.bs.modal', function () {
+          $('#duration-title').focus();
+        })  
+
+        $("#create-update-duration").click(function() {
+          var id = $('#duration-id').val();
+          var title = $('#duration-title').val();
+          var open_begin = $('#open-begin').val();
+          var open_end = $('#open-end').val();
+          var open_dow = $('#open-dow').val();
+          var open_after = $('#open-after').val();
+
+          console.log("duration-id:"+id);
+          // remove all errors
+          $('div').removeClass('has-error');
+          $('.help-block').remove();
+
+          // error handling
+          if (title === "") {
+            $('#title-missing')
+              .addClass('has-error')
+              .append(error_msg("#{I18n.t('opendoor.duration_name_missing')}"));
+          } else if (open_begin+":00" >= open_end+":00") {
+            $('#open-begin-error').addClass('has-error');
+            $('#open-end-error').addClass('has-error');
+            $('#time-error')
+              .addClass('has-error')
+              .html(error_msg(error_msg("#{I18n.t('opendoor.duration_time_error')}")));
+          } else {
+            var method, url;
+            if(id === '') {
+              method = 'POST';
+              url = '/create_duration';
+            } else {
+              method = 'PUT';
+              url = '/update_duration';
+            }
+            // all fine lets create a new entry
+            $.ajax({
+              url: url,
+              type: method,
+              data: {id: id, title: title, open_dow: open_dow,
+                open_begin: open_begin, open_end: open_end, open_after: open_after
+              },
+              error: function (xhr, ajaxOptions, thrownError) {
+                alert("Could not create or update duration.");
+              },
+              success: function(response) {
+                // close the modal and update the dow column
+                $('#duration-modal').modal('hide');
+              }
+            });
+          }
+        });
+
+        function error_msg(msg) {
+          return '<div class="help-block">' + msg + '</div>';
+        }
+
+        $(document.body).on('click', '.edit-duration', function() {
+          var id = $(this).data('duration-id');
+
+          $.getJSON("/get_duration_by_id", {id: id}, function(data) {
+            var result = data['dur'];
+            $('#duration-title').val(result['title']);
+            $('#open-dow').val(result['open_dow']);
+            $('#open-begin').val(result['open_begin']);
+            $('#open-end').val(result['open_end']);
+            $('#open-after').val(result['open_after']);
+            $('#duration-id').val(id);
+          });
+        });
+
+        $(document.body).on('click', '.delete-duration', function() {
+          var id = $(this).data('duration-id');
+
+          if(confirm("#{I18n.t('opendoor.duration_delete_question')}")) { 
+            $.ajax({
+              url: '/delete_duration',
+              type: 'DELETE',
+              data: {
+                id: id
+              }
+            });
+          }
+        });
+
+        $(document.body).on('click', '.toggle-duration', function() {
+          var _this = $(this);
+          var id = _this.data('duration-id');
+          var toggle = _this.data('duration-toggle');
+
+          if(confirm("#{I18n.t('opendoor.duration_disable_question')}")) { 
+            $.ajax({
+              url: '/toggle_duration',
+              type: 'PUT',
+              data: {
+                id: id,
+                toggle: toggle
+              }
+            });
+          }
+        });
+
+        $("#clear-log").click(function() {
+          $.post("/clear_log", {}, function(data, status) {
+            if (status == 'success') {
+              $("#add-to-log").empty();
+              $('#clear-log').addClass('hide');
+            } else {
+              alert("Could not clear log entries.");
+            }
+          });
+        });
+
+      });
+
+      // Web-Socket functions
+      (function() {
+        var show_msg = function(el) {
+          return function(msg){ el.innerHTML = msg + '<br />' + el.innerHTML; }
+        } (document.getElementById('msgs'));
+
+        var ws       = new WebSocket('wss://' + window.location.host + window.location.pathname);
+        ws.onopen    = function() {}; //{ show_msg('websocket opened'); };
+        ws.onclose   = function() { $('#websocket_timeout').removeClass('hide'); };
+
+        ws.onmessage = function(m) {
+          var text; // notification text
+          var lang = ($('#selected_de').length !== 0 ? 'de' : 'en');
+          var notify = true;
+          var cmd = m.data.replace(/[\n]+/g, '');
+
+          //show_msg('websocket message: "' + cmd + "\"\n");
+
+          if (cmd == "APARTMENT DOOR OPENED" || cmd == "FRONT DOOR OPENED" ||
+            cmd == "KEEP APARTMENT DOOR OPEN") {
+            if (cmd == "KEEP APARTMENT DOOR OPEN") {
+              $('#open-apartment-door').addClass('active');
+            }
+            text = "#{I18n.t('opendoor.door_will_be_opened')}";
+
+          } else if (cmd=="DOORBELL PRESSED") {
+            text = "#{I18n.t('opendoor.doorbell_pressed')}";
+
+          } else if (cmd=="AUTO OPEN FRONT DOOR") {
+            text = "#{I18n.t('opendoor.door_opens_automatically')}";
+
+          } else if (cmd=="FRONT DOOR TIMER OFF") {
+            var btnstr;
+            btnstr = "#{I18n.t('opendoor.open_door_timed')}".replace('{mins}', '60')
+            $("#open-front-door-timed").html(btnstr).switchClass('btn-danger', 'btn-warning')
+            $('#time').removeClass('green').removeClass('bold');
+            notify = false;
+
+          } else if (cmd.substring(0, 16)=="FRONT DOOR TIMER") {
+            var mins =  parseInt(m.data.substring(16)), btnstr;
+            $('#time').addClass('green').addClass('bold');
+            if (mins > 0) {
+              btnstr = "#{I18n.t('opendoor.open_door_timed')}".replace('{mins}', mins)
+              $("#open-front-door-timed").html(btnstr).switchClass('btn-warning', 'btn-danger')
+            }
+            console.log("FRONT DOOR TIMER detected: " + mins + " min");
+            notify = false;
+
+          } else if (cmd == "OPEN FRONT DOOR TIMED") {
+            console.log("OPEN DOOR TIMED detected! ");
+            text = "#{I18n.t('opendoor.door_opens_for_60_mins')}";
+
+          } else if (cmd.substring(0, 14)=="UPDATE DOW ROW") {
+            var dow =  parseInt(cmd.substring(15));
+
+            // get open times for a dow
+            $.getJSON("/get_durations_by_dow", {dow: dow}, function(data) {
+              $('#dow-' + dow).empty().append(data.html);
+            });
+            console.log("A DOW ROW CHANGE detected: " + dow);
+            notify = false;
+
+          } else if (cmd.substring(0, 24)=="APARTMENT DOOR TIMER OFF") {
+            $(".li-close").addClass('hidden');
+            $('#open-apartment-door')
+              .removeClass('active')
+              .html("#{I18n.t('opendoor.open_apartment_door_now')}");
+            notify = false;
+
+          } else if (cmd.substring(0, 20)=="APARTMENT DOOR TIMER") {
+            var secs =  parseInt(cmd.substring(20));
+            var btnstr = "#{I18n.t('opendoor.open_apartment_door_timed')}".replace('{secs}', secs)
+            $('#open-apartment-door').html(btnstr);
+            notify = false;
+
+          } else {
+            // ------------------------------------------------------
+            console.log("Unkown command: ->" + m.data + "<-");
+            notify = false;
+          }
+
+          if (notify) {
+            notifyMe(text);
+            setTimeout(addLog, 3000);
+          }
+        };
+      })();
+
+      var addLog = function() {
+        $.ajax({
+          url: "/last_log",
+          success:function(data) {
+            var result = JSON.parse(data);
+            $('#add-to-log').prepend("<tr><td>"+result.timestamp+"</td><td>"+result.log+"</td></tr>");
+            $('#clear-log').removeClass('hide');
+            //console.log(result);
+          }
+        });
+      };
+
+      function notifyMe(msg) {
+        // Let's check if the browser supports notifications
+        if (!("Notification" in window)) {
+          alert("This browser does not support desktop notification");
+        }
+
+        // Let's check whether notification permissions have alredy been granted
+        else if (Notification.permission === "granted") {
+          // If it's okay let's create a notification
+          var notification = new Notification(msg);
+        }
+
+        // Otherwise, we need to ask the user for permission
+        else if (Notification.permission !== 'denied') {
+          Notification.requestPermission(function (permission) {
+            // If the user accepts, let's create a notification
+            if (permission === "granted") {
+              var notification = new Notification(msg);
+            }
+          });
+        }
+        // At last, if the user has denied notifications, and you
+        // want to be respectful there is no need to bother them any more.
+      }

@@ -1,0 +1,17 @@
+source 'https://rubygems.org'
+ruby "2.5.1"
+gem 'json'
+gem 'sinatra'#, '1.4.7'
+gem 'sinatra-contrib'#, '1.4.7'
+gem 'sinatra-activerecord'
+gem 'sinatra-flash'
+gem 'sinatra-partial'
+gem 'sinatra-websocket'
+gem 'sqlite3'
+gem 'haml'
+gem 'thin', '1.7.0'
+gem 'rack-contrib'
+gem 'mkfifo'
+gem 'rake'
+gem 'dotenv'
+

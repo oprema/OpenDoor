@@ -1,0 +1,29 @@
+.col-md-10{id: "dur-#{dur.id}"}
+  .widget.p-xl{class: (dur.disabled? ? 'grey-bg' : 'lazur-bg')} 
+    %span.m-r-xs
+      .pull-right
+        %a.edit-duration{href: '#duration-modal', data: {duration: {id: dur.id}, toggle: 'modal'}}
+          %i.fa.fa-edit
+        %i.fa.fa-close.delete-duration{data: {duration: {id: dur.id}}}
+      %i.fa.toggle-duration{data: {duration: {id: dur.id, toggle: dur.disabled? ? '0' : '1'}}, class: (dur.disabled? ? 'fa-toggle-on' : 'fa-toggle-off')} 
+    %h2
+      = dur.title
+    %ul.list-unstyled.m-t-md
+      %li
+        %i.fa.fa-clock-o.m-r-xs
+        %label
+          = I18n.t('opendoor.start') + ':'
+        %span.dur-start
+          = dur.open_begin.to_hm
+      %li
+        %i.fa.fa-clock-o.m-r-xs
+        %label
+          = I18n.t('opendoor.end') + ':'
+        %span.dur-end
+          = dur.open_end.to_hm
+      - if dur.open_after > 0
+        %li
+          %i.fa.fa-gears.m-r-xs
+          %label
+            = I18n.t('opendoor.after_' + dur.open_after.to_s)
+

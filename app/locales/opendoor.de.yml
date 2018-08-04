@@ -1,0 +1,54 @@
+de:
+  opendoor:
+    auto_open_times: Automatische Öffnungszeiten
+    new_open_time: Neue Zeitspanne
+    authorizations: Autorisierungen
+    open_front_door_now: Hauseingangstür jetzt öffnen
+    keep_apartment_door_3m_open: Wohnungstür 3 Minuten öffnen
+    keep_apartment_door_5m_open: Wohnungstür 5 Minuten öffnen
+    keep_apartment_door_2h_open: Wohnungstür 2 Stunden offen halten
+    close_apartment_door: Wohnungstür schliessen
+    open_apartment_door_now: Wohnungstür jetzt öffnen
+    open_apartment_door_timed: Wohnungstür geöffnet ({secs} Sec)
+    open_door_timed: Automatisches Öffnen für {mins} Min.
+    what_happened: Was bisher geschah
+    erase_history: Historie löschen
+    date_and_time: Datum und Uhrzeit
+    start: Von
+    end: Bis
+    open_after: Automatisch Wohnungstüre öffen
+    after_none: Nein
+    after_1min: Nach einer Minute
+    after_1: 1 Min
+    after_1min30: Nach einer Minute 30
+    after_2: 1 Min 30
+    after_2min: Nach zwei Minuten
+    after_3: 2 Min
+    close: Schliessen
+    save: Speichern
+    delete: Löschen
+    event: Ereignis
+    duration: Zeitspanne
+    opening_times: Öffnungszeiten
+    new_duration: Neue Zeitspanne
+    duration_title: Name
+    duration_name_missing: Name angeben
+    duration_time_error: Zeitauswahl fehlerhaft
+    duration_restrict: max. 8 Zeichen
+    duration_disabled: Zeitspanne inaktiv
+    duration_disable_question: Möchten Sie diese Zeitspanne wirklich aktivieren/deaktivieren?
+    duration_delete_question: Möchten Sie diese Zeitspanne wirklich löschen?
+    properties: Einstellungen
+    no_auth_codes: Keine Auth-Codes vorhanden.
+    create_auth_code: Auth-Code erzeugen
+    nothing_happened_yet: Noch nix passiert
+    erase_log: Log löschen
+    user_exists: Anwender bereits vorhanden!
+    times_for_auto_open: Start und Endzeit für das automatische Öffnen der Hauseingangstür
+    dows_for_auto_open: Wochentage und Zeiten an denen die Hauseingangstür automatisch nach dem Klingeln geöffnet werden soll
+    dow: Wochentag
+    door_opens_automatically: Tür wird automatisch geöffnet
+    doorbell_pressed: Türeklingel wurde betätigt
+    door_will_be_opened: Türe wird geöffnet
+    open_door_now: Türe jetzt öffnen
+    door_opens_for_60_mins: Tür wird die nächsten 60 Minuten automatisch geöffnet

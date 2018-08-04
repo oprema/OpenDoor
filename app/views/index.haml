@@ -1,0 +1,93 @@
+%h2
+  = @title
+%p
+  %button.btn.btn-primary.btn-lg#open-front-door{type: 'button'}
+    = I18n.t('opendoor.open_front_door_now')
+  &nbsp;
+  %button.btn.btn-warning.btn-lg#open-front-door-timed{type: 'button'}
+    = I18n.t('opendoor.open_door_timed').gsub('{mins}', '60')
+%p
+
+  .btn-group
+    %button.btn.btn-success.btn-lg#open-apartment-door{type: 'button'}
+      = I18n.t('opendoor.open_apartment_door_now')
+    %button.btn.btn-success.btn-lg.dropdown-toggle{type: 'button', data: {toggle: 'dropdown'}, aria: {haspopup: 'true', expanded: 'true'}}
+      %span.caret
+      %span.sr-only
+        Toggle Dropdown
+    %ul.dropdown-menu{role: 'menu', aria: {labelledby: 'open-apartment-door'}}
+      %li
+        %a.dropdown-item#keep-apartment-door-3m-open{href: '#'}
+          = I18n.t('opendoor.keep_apartment_door_3m_open')
+      %li
+        %a.dropdown-item#keep-apartment-door-5m-open{href: '#'}
+          = I18n.t('opendoor.keep_apartment_door_5m_open')
+      %li
+        %a.dropdown-item#keep-apartment-door-2h-open{href: '#'}
+          = I18n.t('opendoor.keep_apartment_door_2h_open')
+      %li.li-close.divider.hidden
+      %li.li-close.hidden
+        %a.dropdown-item#close-apartment-door{href: '#'}
+          = I18n.t('opendoor.close_apartment_door')
+
+%h3
+  = I18n.t('opendoor.what_happened')
+  %a#clear-log{href: "#", title: I18n.t('opendoor.erase_log'), class: ("hide" unless @opendoor_logs.size > 0)}
+    %small
+      = I18n.t('opendoor.erase_history')
+
+#log
+  %table.table.table-striped.table-condensed
+    %thead
+      %tr
+        %td
+          = I18n.t('opendoor.date_and_time')
+        %td
+          = I18n.t('opendoor.event')
+    %tbody#add-to-log
+      - @opendoor_logs.all.each do |l|
+        %tr
+          %td
+            = I18n.l(l.created_at, format: :short)
+          %td
+            = l.log_text
+
+%h3
+  = I18n.t('opendoor.auto_open_times')
+  %button.btn.btn-primary.btn-xs#new-duration
+    = I18n.t('opendoor.new_open_time')
+%h4
+  = I18n.t('opendoor.dows_for_auto_open')
+
+%p
+%p
+
+.row
+  - 1.upto(5) do |i|
+    .col-md-2
+      .widget.style1.navy-bg
+        .row.vertical-align
+          .col-xs-10
+            = I18n.t('date.day_names')[i]
+      .row{id: "dow-#{i-1}"}
+        - OpenTime.by_dow(i-1).each do |dur|
+          = partial('badge', locals: { dur: dur })
+
+.row
+  .col-md-2
+    .widget.style1.navy-bg
+      .row.vertical-align
+        .col-xs-10
+          = I18n.t('date.day_names')[6]
+    .row#dow-5
+      - OpenTime.by_dow(5).each do |dur|
+        = partial('badge', locals: { dur: dur })
+  .col-md-2
+    .widget.style1.navy-bg
+      .row.vertical-align
+        .col-xs-10
+          = I18n.t('date.day_names')[0]
+    .row#dow-6
+      - OpenTime.by_dow(6).each do |dur|
+        = partial('badge', locals: { dur: dur })
+

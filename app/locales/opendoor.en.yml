@@ -1,0 +1,55 @@
+en:
+  opendoor:
+    auto_open_times: Automatic open times
+    new_open_time: New duration
+    authorizations: Authorizations
+    open_front_door_now: Open front door now
+    open_apartment_door_now: Open apartment door now
+    keep_apartment_door_3m_open: Keep door open for 3 mins
+    keep_apartment_door_5m_open: Keep door open for 5 mins
+    keep_apartment_door_2h_open: Keep apartment door open for 2 hours
+    close_apartment_door: Close apartment door
+    open_apartment_door_timed: Apartment door opened ({secs} secs)
+    open_door_timed: Automatic opening for {mins} mins
+    what_happened: What happened until now
+    erase_history: Erase history
+    date_and_time: Date and Time
+    start: From
+    end: To
+    open_after: Open Apartment automaticly
+    after_none: No
+    after_1min: After 1 minute
+    after_1: 1 Min
+    after_1min30: After 1 min 30 sec
+    after_2: 1 Min 30
+    after_2min: After 2 minutes
+    after_3: 2 Mins
+    close: Close
+    save: Save
+    delete: Delete
+    duration: Duration
+    opening_times: Opening times
+    new_duration: New duration
+    duration_title: Title
+    duration_name_missing: Name missing
+    duration_time_error: Time selection error
+    duration_restrict: max. 8 Characters
+    duration_disabled: Duration inactive
+    duration_disable_question: Do you really want to enable/disable this duration?
+    duration_delete_question: Do you really want to delete this duration?
+    properties: Properties
+    no_auth_codes: No Auth-Codes available.
+    create_auth_code: Create Auth-Code
+    event: Event
+    nothing_happened_yet: No events
+    erase_log: Erase log
+    user_exists: User already exists!
+    times_for_auto_open: Start and end time for automatic door openings
+    dows_for_auto_open: Days of the week and times when the door opens automatically after the doorbell is ringing
+    dow: Day of the week
+    door_opens_automatically: Door will be opened automatically
+    doorbell_pressed: Doorbell was pressed
+    door_will_be_opened: Door will be opened
+    open_door_now: Open door now
+    door_opens_for_60_mins: Door will be opened automatically within the next 60 minutes
+

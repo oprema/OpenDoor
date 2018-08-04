@@ -1,0 +1,8 @@
+check file opendoor.log with path /home/pi/.opendoord/opendoor.log
+  if timestamp > 30 minutes then restart
+
+check host google with address google.com
+  if failed icmp type echo
+      count 1 with timeout 5 seconds
+      4 times within 5 cycles
+  then restart

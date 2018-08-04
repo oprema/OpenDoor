@@ -1,0 +1,59 @@
+#duration-modal.modal.fade{role: "dialog", tabindex: "-1"}
+  .modal-dialog{role: "document"}
+    .modal-content
+      .modal-header
+        %button.close{"aria-label": "Close", "data-dismiss": "modal", type: "button"}
+          %span{"aria-hidden": "true"} ×
+        %h4.modal-title
+          %i.fa.fa-building-o
+          = I18n.t('opendoor.opening_times')
+      .modal-body
+        %input#duration-id{type: 'hidden', value: ''}
+        .form-group#title-missing
+          %label{for: 'duration-title'}
+            = I18n.t('opendoor.duration_title')
+          %input.form-control.w-250#duration-title{type: "text", placeholder: I18n.t('opendoor.duration_restrict'), size: 8, maxlength: 8}
+
+        .form-group
+          %label{for: 'open-dow'}
+            = I18n.t('opendoor.dow')
+          %select.form-control.w-250{id: "open-dow"}
+            - 1.upto(6) do |i|
+              %option{value: i-1}
+                = I18n.t('date.day_names')[i]
+            %option{value: 6}
+              = I18n.t('date.day_names')[0]
+
+        .form-group
+          %label{for: 'open-begin'}
+            = I18n.t('opendoor.start')
+          .input-group.clockpicker#open-begin-error
+            %input.form-control#open-begin{type: "text"}
+            %span.input-group-addon
+              %span.glyphicon.glyphicon-time
+
+        .form-group
+          %label{for: 'open-end'}
+            = I18n.t('opendoor.end')
+          .input-group.clockpicker#open-end-error
+            %input.form-control#open-end{type: "text"}
+            %span.input-group-addon
+              %span.glyphicon.glyphicon-time
+        .form-group#time-error
+
+        .form-group
+          %label{for: 'open-after'}
+            = I18n.t('opendoor.open_after')
+          %select.form-control.w-250{id: "open-after"}
+            %option{value: 0}
+              = I18n.t('opendoor.after_none')
+            %option{value: 1}
+              = I18n.t('opendoor.after_1min')
+            %option{value: 2}
+              = I18n.t('opendoor.after_1min30')
+            %option{value: 3}
+              = I18n.t('opendoor.after_2min')
+
+      .modal-footer
+        %button.btn.btn-primary#create-update-duration{type: "button"}
+          = I18n.t('opendoor.save')
