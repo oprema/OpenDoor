@@ -1,5 +1,7 @@
 # OpenDoor a Raspberry Pi Application to open doors in an apartment building
 
+<img src="/screenshot/opendoor.png" width="800">
+
 For some people it is simply convinient to open the apartment door via a web application. Some reasons may be: Lots of visitors to a certain time (let them all in if needed), being handicapped (no need to go to the door to open it) or simply being lazy :-).
 
 ### Hardware
