@@ -101,7 +101,7 @@ add:
 I am using a Raspi-Zero (1st Generatiom) without build-in WLan.
 Instead, I connected an Edimax WLan-Adapter (Chipset: Realtek) to the
 Mico-USB.
-I noticed after several hours of idleing that the WLan turned it self off and got unresponsive for up-to 30 secs (not great if you want to open the door imediately while you have someone waiting).
+I noticed after several hours of idleing that the WLan turned it self off and got unresponsive for up-to 30 secs (not great if you want to open the door immediately while you have someone waiting).
 
 #### Turning off WLan Power saving mode
 First check if you have a similar WLan adapter in use:
