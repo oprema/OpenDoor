@@ -33,7 +33,7 @@ Most likely you have a different hardware setup. To make OpenDoor to work with i
 - A Python-GPIO program using Unix IPC (pipes) to communicate with the
   Thin application server
 
-## Installing OpenDoor on a Raspberry Pi Zero (Raspbian Stretch Lite - 2018-06-27)
+### Installing OpenDoor on a Raspberry Pi Zero (Raspbian Stretch Lite - 2018-06-27)
 
 Programm your SD-Card (Etcher) and setup a headless configuration so you can use
 ssh over WLan. Get an internet connection and
@@ -68,7 +68,6 @@ Change directory to ~/etc and execute the following script to add monit, startup
 ```
 
 ### Install the used Gems (Thin, Sinatra, SQLite and more)
-
 The Ruby app makes usage of several Gems which need to be installed.
 Execute the following commands:
 ```
@@ -77,6 +76,7 @@ gem install bundler
 bundle install
 ```
 #### Define your Basic Auth password
+The default login/password is: admin / baseball. However you want to change the password by
 ```
 vi ~/app/.env
 ```
@@ -85,16 +85,25 @@ add line and replace passwd and use your own
 APP_PASS="passwd"
 ```
 
-### WLan gets bored and falls asleep
+### Finally
+Add two entries to the crontab for the user pi:
+```
+crontab -e
+```
+add:
+```
+@reboot sudo /home/pi/restart-opendoor.sh
+```
+### IMPORTANT: Do not forget to change the default pi password.
 
+## Additional remarks
+### WLan gets bored and falls asleep
 I am using a Raspi-Zero (1st Generatiom) without build-in WLan.
 Instead, I connected an Edimax WLan-Adapter (Chipset: Realtek) to the
 Mico-USB.
-
 I noticed after several hours of idleing that the WLan turned it self off and got unresponsive for up-to 30 secs (not great if you want to open the door imediately while you have someone waiting).
 
 #### Turning off WLan Power saving mode
-
 First check if you have a similar WLan adapter in use:
 ```
 lsmod
@@ -122,14 +131,3 @@ iw wlan0 get power_save
 ```
 It should be off now.
 
-### Finally
-Add two entries to the crontab for the user pi:
-```
-crontab -e
-```
-add:
-```
-@reboot sudo /home/pi/restart-opendoor.sh
-```
-
-### Do not forget to change the default pi password.
