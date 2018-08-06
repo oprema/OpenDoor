@@ -25,12 +25,13 @@ Most likely you have a different hardware setup. To make OpenDoor to work with i
 5. Web notifications when the door bell rings
 6. Logging ringing and who opened which door at a time
 7. English and German language support
+8. Mobile ready
 
 ### Technology used
 
 - Nginx Web server as a reverse proxy for the used Thin application server
 - A Sinatra app using Ruby and Thin with Web-Sockets for notifications
-- Haml and Javascript for the Web-Front-End
+- Haml, Bootstrap 3 and Javascript for the Web-Front-End
 - SQLite3 for persistent data storage
 - A Python-GPIO program using Unix IPC (pipes) to communicate with the
   Thin application server
